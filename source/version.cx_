@@ -1,0 +1,3 @@
+#include "version.hpp"
+
+std::string const VPM_FRAMEWORK_VERSION = "${VPM_FRAMEWORK_VERSION}";

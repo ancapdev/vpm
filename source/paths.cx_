@@ -1,0 +1,5 @@
+#include "paths.hpp"
+
+std::string const VPM_CONFIG_FILE_NAME = ".vpm.yaml";
+std::string const VPM_DIR = "${CMAKE_CURRENT_SOURCE_DIR}";
+std::string const DEFAULT_GENERATOR = "${CMAKE_GENERATOR}";
