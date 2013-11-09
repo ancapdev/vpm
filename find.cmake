@@ -41,6 +41,7 @@ foreach(_root ${VPM_PACKAGE_ROOTS})
   endforeach()
 endforeach()
 
+# TODO: Place packages in the package root where their repository is defined
 function(vpm_download_package _outDir _name _version _variant)
   if("${_variant}" STREQUAL "")
     set(_dashvar "")
@@ -70,7 +71,7 @@ function(vpm_download_package _outDir _name _version _variant)
   string(REPLACE "<dashvar>" "${_dashvar}" _cmd ${_cmd})
   string(REPLACE "<slashvar>" "${_slashvar}" _cmd ${_cmd})
   string(REPLACE "<destination>" ${_destination} _cmd ${_cmd})
-  message(STATUS "Downloading '${_name}' version '${_version}${_dashvar}' from '${_cmd}'")
+  message(STATUS "Downloading '${_name}' version '${_version}${_dashvar}' from '${_repo}' (${_cmd})")
   string(REPLACE " " ";" _cmd ${_cmd})
   execute_process(
     COMMAND ${_cmd}

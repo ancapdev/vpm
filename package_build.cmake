@@ -116,7 +116,7 @@ if(NOT DEFINED VPM_CONFIG_PACKAGE)
 endif()
 
 vpm_process_package_shorthand(VPM_CONFIG_PACKAGE_NAME ${VPM_CONFIG_PACKAGE})
-vpm_set_default_version(${VPM_CONFIG_PACKAGE_NAME} trunk)
+vpm_set_default_version(${VPM_CONFIG_PACKAGE_NAME} master)
 vpm_get_version(_configVersion ${VPM_CONFIG_PACKAGE_NAME})
 
 vpm_find_package(_configDir ${VPM_CONFIG_PACKAGE_NAME})
