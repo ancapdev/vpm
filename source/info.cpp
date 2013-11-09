@@ -30,8 +30,6 @@ int Info::Run(const Configuration& configuration, int argc, char** argv) const
     std::cout << "Default Config Package: " << configuration.defaultConfigPackage << std::endl;
     for (auto it = configuration.packageRoots.begin(); it != configuration.packageRoots.end(); ++it)
         std::cout << "Package root:           " << *it << std::endl;
-    for (auto it = configuration.packageRepositories.begin(); it != configuration.packageRepositories.end(); ++it)
-        std::cout << "Package repository:     " << *it << std::endl;
 
     std::cout << std::endl;
 

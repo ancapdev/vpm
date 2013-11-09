@@ -164,16 +164,6 @@ int Metabuild::Run(Configuration const& configuration, int argc, char** argv) co
         cmdline << "\"";
     }
 
-    if (!configuration.packageRepositories.empty())
-    {
-        cmdline << " -DVPM_REPOSITORIES=\"";
-        auto it = configuration.packageRepositories.begin();
-        cmdline << *it;
-        for (++it; it != configuration.packageRepositories.end(); ++it)
-            cmdline << ";" << *it;
-        cmdline << "\"";
-    }
-
     cmdline << " -DVPM_BUILD_PACKAGES=\"";
     for (auto it = unnamed.begin(), end = unnamed.end(); it != end; ++it)
         cmdline << (it != unnamed.begin() ? ";" : "") << EscapeBackslash(*it);

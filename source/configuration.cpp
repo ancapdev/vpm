@@ -83,16 +83,6 @@ void UpdateConfigurationFromYaml(Configuration& config, std::istream& input)
             }
         }
 
-        if (YAML::Node const* repos = doc.FindValue("package_repositories"))
-        {
-            for (std::size_t i = 0; i < repos->size(); ++i)
-            {
-                std::string repo;
-                (*repos)[i] >> repo;
-                config.packageRepositories.push_back(repo);
-            }
-        }
-
         if (parser.GetNextDocument(doc))
             throw std::runtime_error("More than 1 yaml documents in stream");
     }

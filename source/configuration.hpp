@@ -18,7 +18,6 @@ struct Configuration
     std::string defaultGenerator;
     std::string defaultConfigPackage;
     std::vector<std::string> packageRoots;
-    std::vector<std::string> packageRepositories;
 };
 
 void UpdateConfigurationFromYaml(Configuration& config, std::istream& input);
