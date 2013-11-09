@@ -4,9 +4,6 @@
 include(debug.cmake)
 include(variant.cmake)
 include(version.cmake)
-include(find.cmake)
-include(depend.cmake)
-include(utility.cmake)
 
 #
 # Platform properties
@@ -103,6 +100,13 @@ if(NOT DEFINED VPM_PACKAGE_ROOTS)
   get_filename_component(_root "${CMAKE_CURRENT_LIST_DIR}/../../" ABSOLUTE)
   set(VPM_PACKAGE_ROOTS ${_root})
 endif()
+
+#
+# Dependency machinery. Must be included only after package roots are set.
+#
+include(find.cmake)
+include(depend.cmake)
+include(utility.cmake)
 
 #
 # Load config package, to set up compiler flags etc
