@@ -1,4 +1,4 @@
-# Copyright (c) 2011-2013, Christian Rorvik
+# Copyright (c) 2011-2014, Christian Rorvik
 # Distributed under the Simplified BSD License (See accompanying file LICENSE.txt)
 
 include(debug.cmake)
