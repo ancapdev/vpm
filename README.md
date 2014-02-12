@@ -1,7 +1,89 @@
 # Versioned Package Make
 ## Introduction
+### Package layout
+### Versions and variants
 ## Build
+The vpm framework lives in the package tree, so first create a place to store packages. E.g.,
+```Shell
+mkdir ~/packages/
+```
+Now create a directory for the vpm package itself, and clone the framework into a versioned subdirectory.
+```Shell
+mkdir ~/packages/vpm
+git clone git@github.com:ancapdev/vpm -b 1.06.00 ~/packages/vpm/1.06.00
+```
+Finally, build the `vpm` tool. The framework has 2 build modes, self build, and package build. Its default mode is a self build, so simply run `CMake` the standard way to build `vpm`. Later, the `vpm` tool will take care of invoking CMake with the necessary arguments to run a package build.
+```Shell
+mkdir ~/build && mkdir ~/build/vpm && cd ~/build/vpm
+cmake ~/packages/vpm/1.06.00
+make
+```
+
 ## Install and Configure
+The `vpm` tool is a standalone binary with no dependencies. Copy it to your path to use it. E.g.,
+```Shell
+cp ./vpm ~/bin/
+```
+
+The tool captures many of its default options from the environment at build time, such as the framework path, the package roots, the `CMake` generator to use, and the architecture width. These can optionally be overriden by adding a .vpm.yml configuration file to the user home directory. An example config file exists in the framework directory.
+
 ## Add package repositories
+In order for the framework to find and download packages, one or more repository descriptions must be added to one or more of the package roots. Repository descriptions live in `.repos` subdirectories under the package roots. Typically, _package_ repository descriptions will be _git_ repositories themselves. For example, to add the https://github.com/ancapdev repository, clone `git@github.com:ancapdev/packages.meta` into the `.repos` folder. The name for the repository is arbitrary, but if more than 1 exists, they will be searched in alphabetical order when fetching new packages.
+```Shell
+mkdir ~/packages/.repos
+git clone git@github.com:ancapdev/packages.meta ~/packages/.repos/ancapdev
+```
+From time to time, as new packages are added, it may be necessary to update the repository description. Do this the same way you would update any other repo. E.g.,
+```Shell
+cd ~/packages/.repos/ancapdev
+git pull
+```
+
 ## Build packages
+A package build can be initiated by invoking `CMake` directly, or through the `vpm` tool. The `vpm` tool isn't strictly required, but it makes passing many of the necessary parameters to `CMake` and the framework much more convenient.
+
+### The vpm tool
+
+`vpm` supports a set of commands with a general syntax:
+```Shell
+vpm <command> <arguments>
+```
+
+#### Help
+To get help on a specific command, run the `help` command:
+```Shell
+vpm help <command>
+```
+This will provide a description for a command and list all its options.
+
+#### Options
+Arguments are either named options or unnamed. Options come in 3 forms:
+- Flags: have no value, only `-<key>`.
+- Enumerations: `-<key>=<value>`, where value is constrained to a set.
+- Strings: `-<key>=<value>`, where value is any string.
+
+Keys can be shortened to their shortest unambiguous key prefix. For example:
+```Shell
+vpm mbuild crunch.base -what
+```
+Will run the `mbuild` command with the `-whatif` option.
+
+If enumeration keys can be determined unambiguously from their values, they can be provided by value only through the `+<value>` syntax. For example:
+```Shell
+vpm mbuild crunch.base +ninja
+```
+Will run the `mbuild` command with the `-generator=ninja` option.
+
+### The mbuild command
+`mbuild` is the meta build command. It's responsible for generating build files from packages by invoking `CMake` on the vpm framework and passsing all the necessary arguments. It takes the following form:
+```Shell
+vpm mbuild <package1>..<packageN> [options]
+```
+Where `<package1>..<packageN>` is a list of of packages to build. Each package argument takes the form `<name>[?<variant>][@<version>]`. For example, to generate build files for `crunch.base` version 1.00.00, and all of its dependencies, run:
+```Shell
+vpm mbuild crunch.base@1.00.00
+```
+A full list of options can be retrieved by running `vpm help mbuild`.
+
+
 ## Author packages
