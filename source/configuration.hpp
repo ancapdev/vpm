@@ -1,4 +1,4 @@
-// Copyright (c) 2012, Christian Rorvik
+// Copyright (c) 2012-2014, Christian Rorvik
 // Distributed under the Simplified BSD License (See accompanying file LICENSE.txt)
 
 #ifndef CONFIGURATION_HPP
@@ -17,6 +17,7 @@ struct Configuration
     std::string frameworkDirectory;
     std::string defaultGenerator;
     std::string defaultConfigPackage;
+    std::size_t defaultBits;
     std::vector<std::string> packageRoots;
 };
 

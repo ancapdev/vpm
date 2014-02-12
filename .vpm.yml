@@ -1,0 +1,19 @@
+# Uncomment to override the vpm framework location. Defaults to location where the vpm tool was compiled from.
+# framework_path: ~/packages/vpm/1.06.00
+
+# Uncomment to override the default generator. Defaults to the generator used to build the vpm tool.
+# default_generator: ninja
+# default_generator: make
+# default_generator: vs12
+
+# Uncomment to override the default config package. Defaults to vpm.config.
+# default_config_package: my_vpm_config
+
+# Uncomment to override the default width of the target architecture. Defaults to the architecture width the vpm tool was compiled for.
+# default_bits: 32
+# default_bits: 64
+
+# Uncomment to override package roots. Defaults to 2 levels up from framework_path.
+# package_roots:
+#  - ~/packages
+#  - ~/more_packages

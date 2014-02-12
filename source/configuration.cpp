@@ -1,4 +1,4 @@
-// Copyright (c) 2012, Christian Rorvik
+// Copyright (c) 2012-2014, Christian Rorvik
 // Distributed under the Simplified BSD License (See accompanying file LICENSE.txt)
 
 #include "configuration.hpp"
@@ -49,12 +49,12 @@ namespace
 }
 
 Configuration::Configuration()
-:
-    homeDirectory(GetHomeDirectory()),
-    configFileName(homeDirectory + PATH_SEP_CHAR + VPM_CONFIG_FILE_NAME),
-    frameworkDirectory(VPM_DIR),
-    defaultGenerator(DEFAULT_GENERATOR),
-    defaultConfigPackage("vpm.config")
+: homeDirectory(GetHomeDirectory())
+, configFileName(homeDirectory + PATH_SEP_CHAR + VPM_CONFIG_FILE_NAME)
+, frameworkDirectory(VPM_DIR)
+, defaultGenerator(DEFAULT_GENERATOR)
+, defaultConfigPackage("vpm.config")
+, defaultBits(sizeof(void*) * 8)
 {
 }
 
@@ -72,6 +72,9 @@ void UpdateConfigurationFromYaml(Configuration& config, std::istream& input)
 
         if (YAML::Node const* node = doc.FindValue("default_config_package"))
             *node >> config.defaultConfigPackage;
+
+        if (YAML::Node const* node = doc.FindValue("default_bits"))
+            *node >> config.defaultBits;
 
         if (YAML::Node const* roots = doc.FindValue("package_roots"))
         {

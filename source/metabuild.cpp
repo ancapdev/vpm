@@ -1,4 +1,4 @@
-// Copyright (c) 2011, Christian Rorvik
+// Copyright (c) 2011-2014, Christian Rorvik
 // Distributed under the Simplified BSD License (See accompanying file LICENSE.txt)
 
 #include "metabuild.hpp"
@@ -127,7 +127,7 @@ int Metabuild::Run(Configuration const& configuration, int argc, char** argv) co
     cmdline << "cmake " << configuration.frameworkDirectory;
 
     std::string const* bitsString = options.GetValue("bits");
-    std::size_t const bits = bitsString ? (*bitsString == "32" ? 32 : 64) : sizeof(void*) * 8;
+    std::size_t const bits = bitsString ? (*bitsString == "32" ? 32 : 64) : configuration.defaultBits;
     std::string const generator = GetGenerator(configuration, options, bits);
 
     cmdline << " -G \"" << generator << "\"";

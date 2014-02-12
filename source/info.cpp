@@ -1,4 +1,4 @@
-// Copyright (c) 2011-2013, Christian Rorvik
+// Copyright (c) 2011-2014, Christian Rorvik
 // Distributed under the Simplified BSD License (See accompanying file LICENSE.txt)
 
 #include "info.hpp"
@@ -28,6 +28,7 @@ int Info::Run(const Configuration& configuration, int argc, char** argv) const
     std::cout << "Framework Dir:          " << configuration.frameworkDirectory << std::endl;
     std::cout << "Default Generator:      " << configuration.defaultGenerator << std::endl;
     std::cout << "Default Config Package: " << configuration.defaultConfigPackage << std::endl;
+    std::cout << "Default bits:           " << configuration.defaultBits << std::endl;
     for (auto it = configuration.packageRoots.begin(); it != configuration.packageRoots.end(); ++it)
         std::cout << "Package root:           " << *it << std::endl;
 
@@ -58,7 +59,7 @@ void PrintVersion()
 
 void PrintCopyright()
 {
-    std::cout << "Copyright (c) 2011-2013, Christian Rorvik" << std::endl;
+    std::cout << "Copyright (c) 2011-2014, Christian Rorvik" << std::endl;
     std::cout << "Distributed under the Simplified BSD License" << std::endl;
 }
 
