@@ -7,7 +7,7 @@
 # default_generator: vs12
 
 # Uncomment to override the default config package. Defaults to vpm.config.
-# default_config_package: my_vpm_config
+# default_config_package: my_vpm_config@some_version
 
 # Uncomment to override the default width of the target architecture. Defaults to the architecture width the vpm tool was compiled for.
 # default_bits: 32
