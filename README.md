@@ -1,7 +1,24 @@
 # Versioned Package Make
 ## Introduction
+VPM is a framework for managing source level C++ packages and their dependencies, with a goal to provide flexible configuration management optmized for large scale software development. It is not intended for deployment and installation of software to end users, but to help with the composition of software from individually versioned modules, called packages.
+
+The framework is built over `CMake` and constitutes a set of `CMake` scripts that deal with fetching and combining packages into a build, and command line tool (`vpm`) to make the invocation of the framework more convenient.
+
 ### Package layout
+Packages live in one or more package roots in a structured layout:
+```
+<package_root>/<package>/<version>[-<variant>/...
+```
+
+Internally a package has one or both of:
+- A `configure.cmake` script. This script is included in all dependent packages. It exposes public properties of the package, like include directories, import targets, macros, and variables.
+- A `CMakeLists.txt` script. This script is included in the normal `CMake` way to build the package.
+
 ### Versions and variants
+<!--- 
+immutability
+-->
+
 ## Build
 The vpm framework lives in the package tree, so first create a place to store packages. E.g.,
 ```Shell
