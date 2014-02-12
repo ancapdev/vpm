@@ -7,7 +7,7 @@ The framework is built over `CMake` and constitutes a set of `CMake` scripts tha
 ### Package layout
 Packages live in one or more package roots in a structured layout:
 ```
-<package_root>/<package>/<version>[-<variant>/...
+<package_root>/<package>/<version>[-<variant>]/...
 ```
 
 Internally a package has one or both of:
@@ -15,9 +15,12 @@ Internally a package has one or both of:
 - A `CMakeLists.txt` script. This script is included in the normal `CMake` way to build the package.
 
 ### Versions and variants
+
+
 <!--- 
 immutability
 -->
+
 
 ## Build
 The vpm framework lives in the package tree, so first create a place to store packages. E.g.,
