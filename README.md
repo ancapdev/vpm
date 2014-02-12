@@ -14,13 +14,15 @@ Internally a package has one or both of:
 - A `configure.cmake` script. This script is included in all dependent packages. It exposes public properties of the package, like include directories, import targets, macros, and variables.
 - A `CMakeLists.txt` script. This script is included in the normal `CMake` way to build the package.
 
-### Versions and variants
+### Versions
+They way VPM implements configuration managements is through package versions. Versions can be selected globally or directly when specifying dependencies within a package, and only a single version of a particular package is used throughout a single build. From the point of view of the framework, versions are immutable once fetched, and the framework will make no attempt to update existing packages. The suggested way to deal with package upgrades is therefore to maintain immutable release versions, and change the version number when bugs are fixed or new features are added. This is also cleaner and more explict from a package consumer point of view than pulling repositories for changes. For development lines, it is advisable to clone and maintain repos manually.
 
+Typically versions correspond to branches in a git repo. Using tags could be an alternative to branches for release versions, and more clearly communicates immutability. However, tags would require a clone of some branch and subsequent checkout of the tag, whereas branches can be cloned directly. This simplifies the fetch command configuration, and also easily allows for shallow clones of auto-downloaded packages. Tags are currently not supported.
 
-<!--- 
-immutability
--->
+When looking for packages, the framework searches the package roots based on the version and variant specified for each package. These properties determinde the possible physical locations for a package. SCM branches, tags, etc, are never inspected to search for or validates versions.
 
+### Variants
+Variants are a way to set up multiple different implementations of a package that all provide the same public interface and functionality. These would typically be used to package up pre-built libraries for different architectures and platforms separately, or to search for those libraries on the system, or even build them from source. Different variants point to different source repositories (potentially in different package roots and/or from different package repositories and hosts), and the repository name is defined as `<package>-<variant>`. Variant names are arbitrary and user defined.
 
 ## Build
 The vpm framework lives in the package tree, so first create a place to store packages. E.g.,
