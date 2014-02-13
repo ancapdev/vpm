@@ -101,30 +101,109 @@ Will run the `mbuild` command with the `-generator=ninja` option.
 ```Shell
 vpm mbuild <package1>..<packageN> [options]
 ```
-Where `<package1>..<packageN>` is a list of of packages to build. Each package argument takes the form `<name>[?<variant>][@<version>]`. For example, to generate build files for `crunch.base` version 1.00.00, and all of its dependencies, run:
+Where `<package1>..<packageN>` is a list of of packages to build. Each package argument takes the form `<name>[?<variant>][@<version>]`. For example, to generate build files for `crunch.base` version `1.00.00`, and all of its dependencies, run:
 ```Shell
 vpm mbuild crunch.base@1.00.00
 ```
 A full list of options can be retrieved by running `vpm help mbuild`.
 
+#### Configuration
+Configuration takes place in a few different places
+##### Globally
+The `vpm` configuration in `$HOME/.vpm.yml` can be used to specify some properties that affect the build. In terms of configuration, it can set the config package.
+
+##### In the config package
+The config package is a place to set global compile flags and settings that are the same for the whole build, to ensure such settings are consistent and the resulting libraries compose correctly. Typically this package will be the same across an organization or a team, and used across all builds. The default config package is `vpm.config`.
+
+##### Per build
+Some configuration can take place on the command line through arguments to `vpm mbuild` or directly to CMake. Most importantly, package versions and variants can be specified via the syntax described above, and the config package can be overriden.
+
+VPM will also look for a `configure.cmake` script in the build directory, and this is intended to be used for more complex configuration scenarios. `configure.cmake` can set any `CMake` variables, but more importantly can set package versions and variants. Note however that `configure.cmake` is included before the config package and before any of the dependency machinery has been created. This is to allow variables that alter the behavior of these components to be specified by the user, but it also means `configure.cmake` must limits its actions to configuration only.
 
 ## Author packages
 
 ### Files
-configure.cmake
-CMakeLists.txt
-vpm_include_last
+VPM looks for 3 files in the root of each package, all of which are optional.
+
+#### configure.cmake
+This script is included in every dependent package and is used to publish include directories and other state or functionality. For example, a package foo's `configure.cmake` might look like:
+```CMake
+# Bring in dependencies that are required for foo's public headers.
+vpm_depend(bar)
+
+# Make include files visible to dependent packages
+vpm_include_directories(${CMAKE_CURRENT_LIST_DIR}/include)
+
+# Some feature support variable
+set(FOO_SUPPORTS_XYZ FALSE)
+
+# Macro that can be used by dependent packages
+macro(foo_do_something)
+```
+
+#### CMakeLists.txt
+This is the normal `CMakeLists.txt` as would be in a standard `CMake` build. Additionally there are VPM specific macros and variables available to configure dependencies and check compatibilities. A typical `CMakeLists.txt` might something like:
+```CMake
+# Bring in own configure.cmake script. Ensures this is only included once per CMakeLists.txt
+vpm_depend_self()
+
+# Add dependency on boost.
+# Set default version in case no version has been configured globally.
+# Also check minimum version for the features we require.
+vpm_set_default_version(boost 1.55.0)
+vpm_minimum_version(boost 1.53.0)
+vpm_depend(boost)
+
+# Add the foo library with a few source files
+vpm_add_library(foo
+  include/foo/foo.hpp
+  src/foo.cpp)
+  
+# Link foo to bar
+vpm_add_link_dependency(foo bar)
+```
+
+#### vpm_include_last
+This is a special file, which if present tells VPM to defer inclusion of this package until all other packages have been processed. This can be useful for generating output that depends on the global state of the build, such as embedding information about the packages used.
+
+### Suggested Layout
+Aside from the files used by the framework, package layout is up to package authors. For consistency, the suggested layout is:
+```Shell
+<package>/include/<package>/...
+<package>/src/...
+<package>/doc/...
+<package>/test/...
+<package>/example/...
+```
 
 ### Functions and Macros
-vpm_depend()
-vpm_set_default_version()
-vpm_set_default_versions()
-vpm_set_default_variant()
-vpm_set_default_variants()
-vpm_include_directories()
-
+| Signature | Description |
+| --------- | ----------- |
+| `vpm_depend(<package>..<package>)` | Add a dependency on one or more packages |
+| `vpm_depend_self()` | Add a dependency on the current package to include the package's own `configure.cmake` script, while ensuring it is only included once within the current `CMakeLists.txt` |
+| `vpm_set_version(<package> <version>)` | Set the version to use for a package |
+| `vpm_set_versions((<package> <version>)..(<package> <version>))` | Set the versions to use for multiple packages |
+| `vpm_set_variant(<package> <variant>)` | Set the variant to use for a package |
+| `vpm_set_variants((<package> <variant>)..(<package> <variant>))` | Set the variants to use for multiple packages |
+| `vpm_set_default_version(<package> <version>)` | Set the version to use for a package if it has not already been set. Prefer this form when setting versions from within packages |
+| `vpm_set_default_versions((<package> <version>)..(<package> <version>))` | Call `vpm_set_default_version` for multiple packages |
+| `vpm_set_default_variant(<package> <variant>)` | Set the variant to use for a package if it has not already been set. Prefer this form when setting variants from within packages |
+| `vpm_set_default_variants((<package> <variant>)..(<package> <variant>))` | Call `vpm_set_default_variant` for multiple packages |
+| `vpm_get_version(<version_var> <package>)` | Get the configured version for a package. This does not mean that the package has been included |
+| `vpm_get_variant(<variant_var> <package>)` | Get the configured variant for a package. This does not mean that the package has been included |
+| `vpm_include_directories(<directory> ... <directory>)` | Equivalent of `CMake` `include_directories()` |
+| `vpm_minimum_version(<package> <version>)` | Specificy the minimum version of the `VPM` framework that must be used. Will fail the build if the framework version is lower than `<version>` |
+| `vpm_minimum_framework_version(<version>)` | Specificy the minimum version of a package that must be used. Will fail the build if the package version is lower than `<version>` |
+| `vpm_add_library(<name> <file>..<file>)` | Equivalent of `CMake` `add_library()` |
+| `vpm_add_executable(<name> <file>..<file>)` | Equivalent of `CMake` `add_executable()` |
+| `vpm_add_link_dependencies(<target> <dependency>..<dependency>)` | Add libraries to link with `<target>`. Works transitively for library targets |
+| `vpm_add_build_dependencies(<target> <dependency>..<dependency>)` | Ensure dependencies are built before `<target>` |
+| `vpm_add_build_and_link_dependencies(<target> <dependency>..<dependency>)` | Ensure dependencies are built before `<target>` and add dependencies to link with `<target>` |
 
 ### Variables
-VPM_CURRENT_PACKAGE_IS_ROOT
-VPM_CURRENT_PACKAGE
-VPM_CURRENT_PACKAGE_DIR
+| Name | Value |
+| ---- | ----- |
+| `VPM_CURRENT_PACKAGE_IS_ROOT` | `TRUE` if the package who's `CMakeLists.txt` is currently being configured was part of the set of packages specified directly by the user. I.e., not brought in through a dependency. Otherwise `FALSE` |
+| `VPM_CURRENT_PACKAGE` | The name of the package who's `CMakeLists.txt` is currently being configured. |
+| `VPM_CURRENT_PACKAGE_DIR` | The path to the package who's `CMakeLists.txt` is currently being configured. |
+| `VPM_FRAMEWORK_VERSION` | The version of this framework |
