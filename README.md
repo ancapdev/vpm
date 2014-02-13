@@ -109,3 +109,22 @@ A full list of options can be retrieved by running `vpm help mbuild`.
 
 
 ## Author packages
+
+### Files
+configure.cmake
+CMakeLists.txt
+vpm_include_last
+
+### Functions and Macros
+vpm_depend()
+vpm_set_default_version()
+vpm_set_default_versions()
+vpm_set_default_variant()
+vpm_set_default_variants()
+vpm_include_directories()
+
+
+### Variables
+VPM_CURRENT_PACKAGE_IS_ROOT
+VPM_CURRENT_PACKAGE
+VPM_CURRENT_PACKAGE_DIR
