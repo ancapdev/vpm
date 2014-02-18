@@ -1,7 +1,7 @@
 # Copyright (c) 2011-2014, Christian Rorvik
 # Distributed under the Simplified BSD License (See accompanying file LICENSE.txt)
 
-set(VPM_FRAMEWORK_VERSION 1.06.00)
+set(VPM_FRAMEWORK_VERSION 1.06.01)
 
 macro(vpm_set_version _name _version)
   if(VPM_VERBOSE)
