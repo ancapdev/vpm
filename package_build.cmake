@@ -1,4 +1,4 @@
-# Copyright (c) 2011-2013, Christian Rorvik
+# Copyright (c) 2011-2014, Christian Rorvik
 # Distributed under the Simplified BSD License (See accompanying file LICENSE.txt)
 
 include(debug.cmake)
@@ -44,7 +44,7 @@ macro(vpm_add_library _name)
 endmacro()
 
 macro(vpm_add_executable _name)
-  add_executable(${ARGN})
+  add_executable(${_name} ${ARGN})
 endmacro()
 
 macro(vpm_add_link_dependencies _name)
