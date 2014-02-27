@@ -29,7 +29,7 @@ int Info::Run(const Configuration& configuration, int argc, char** argv) const
     std::cout << "Default Generator:      " << configuration.defaultGenerator << std::endl;
     std::cout << "Default Config Package: " << configuration.defaultConfigPackage << std::endl;
     std::cout << "Default bits:           " << configuration.defaultBits << std::endl;
-    for (auto it = configuration.packageRoots.begin(); it != configuration.packageRoots.end(); ++it)
+    for (std::vector<std::string>::const_iterator it = configuration.packageRoots.begin(); it != configuration.packageRoots.end(); ++it)
         std::cout << "Package root:           " << *it << std::endl;
 
     std::cout << std::endl;
@@ -66,9 +66,10 @@ void PrintCopyright()
 void PrintCommands()
 {
     std::cout << "Commands:" << std::endl;
-    auto commands = GetCommands();
-    std::for_each(commands.begin(), commands.end(), [] (ICommand const* command)
+    std::vector<ICommand const*> const& commands = GetCommands();
+    for (std::size_t i = 0; i < commands.size(); ++i)
     {
+        ICommand const* command = commands[i];
         std::cout << "\tvpm " << std::setw(20) << std::left << command->GetName() << command->GetDescription() << std::endl;
-    });
+    };
 }

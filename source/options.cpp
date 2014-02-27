@@ -31,12 +31,12 @@ void OptionsDesc::Add(Desc const& descriptor)
 
 OptionsDesc::Desc const* OptionsDesc::Find(std::string const& nameOrPrefix) const
 {
-    auto foundIt = mDescriptors.find(nameOrPrefix);
+    DescriptorMap::const_iterator foundIt = mDescriptors.find(nameOrPrefix);
     if (foundIt != mDescriptors.end())
         return &foundIt->second;
 
     // Search for option by shorthand prefix. Must be unique prefix
-    for (auto it = mDescriptors.begin(); it != mDescriptors.end(); ++it)
+    for (DescriptorMap::const_iterator it = mDescriptors.begin(); it != mDescriptors.end(); ++it)
     {
         if (it->first.length() > nameOrPrefix.length() &&
             it->first.compare(0, nameOrPrefix.length(), nameOrPrefix, 0, nameOrPrefix.length()) == 0)
@@ -54,7 +54,7 @@ OptionsDesc::Desc const* OptionsDesc::Find(std::string const& nameOrPrefix) cons
 OptionsDesc::Desc const* OptionsDesc::FindForValue(std::string const& value) const
 {
     Desc const* found = nullptr;
-    for (auto it = mDescriptors.begin(); it != mDescriptors.end(); ++it)
+    for (DescriptorMap::const_iterator it = mDescriptors.begin(); it != mDescriptors.end(); ++it)
     {
         if (it->second.type == TYPE_ENUM && it->second.values.count(value) != 0)
             if (found)
@@ -134,7 +134,7 @@ Options::Options(OptionsDesc const& descriptors, int argc, char** argv)
 
 std::string const* Options::GetValue(std::string const& name) const
 {
-    auto it = mNamed.find(name);
+    std::map<std::string, std::string>::const_iterator it = mNamed.find(name);
     return it != mNamed.end() ? &it->second : nullptr;
 }
 

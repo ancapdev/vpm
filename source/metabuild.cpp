@@ -157,7 +157,7 @@ int Metabuild::Run(Configuration const& configuration, int argc, char** argv) co
     if (!configuration.packageRoots.empty())
     {
         cmdline << " -DVPM_PACKAGE_ROOTS=\"";
-        auto it = configuration.packageRoots.begin();
+        std::vector<std::string>::const_iterator it = configuration.packageRoots.begin();
         cmdline << *it;
         for (++it; it != configuration.packageRoots.end(); ++it)
             cmdline << ";" << *it;
@@ -165,7 +165,7 @@ int Metabuild::Run(Configuration const& configuration, int argc, char** argv) co
     }
 
     cmdline << " -DVPM_BUILD_PACKAGES=\"";
-    for (auto it = unnamed.begin(), end = unnamed.end(); it != end; ++it)
+    for (std::vector<char const*>::const_iterator it = unnamed.begin(), end = unnamed.end(); it != end; ++it)
         cmdline << (it != unnamed.begin() ? ";" : "") << EscapeBackslash(*it);
     cmdline << "\"";
     

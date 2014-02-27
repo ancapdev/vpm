@@ -5,8 +5,10 @@ project(vpm)
 
 include(version.cmake)
 
-# Enable C++11 mode on linux compilers
-if(UNIX)
+# Enable C++11 mode on unix compilers, excluding solaris
+if(CMAKE_SYSTEM_NAME STREQUAL "SunOS")
+  add_definitions("-Dnullptr=0")
+elseif(UNIX)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wno-deprecated-declarations")
 endif()
 

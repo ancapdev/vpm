@@ -42,14 +42,16 @@ public:
     template<typename F>
     void ForEach(F f) const
     {
-        for (auto it = mDescriptors.begin(); it != mDescriptors.end(); ++it)
+        for (DescriptorMap::const_iterator it = mDescriptors.begin(); it != mDescriptors.end(); ++it)
             f(it->second);
     }
 
 private:
+    typedef std::map<std::string, Desc> DescriptorMap;
+
     void Add(Desc const& descriptor);
 
-    std::map<std::string, Desc> mDescriptors;
+    DescriptorMap mDescriptors;
 };
 
 class Options

@@ -24,26 +24,26 @@ namespace
 
     std::string GetHomeDirectory()
     {
-		if (auto vpmHome = std::getenv("VPM_HOME"))
-			return vpmHome;
+        if (char const* vpmHome = std::getenv("VPM_HOME"))
+	    return vpmHome;
 
-        if (auto home = std::getenv("HOME"))
+        if (char const* home = std::getenv("HOME"))
             return home;
 
 #ifndef _WIN32
-		return "~";
+        return "~";
 #else
-		// Search LocalAppData and User Profile path. Prefer LocalAppData as
-		// it is non-roaming.
-		auto localAppDir = GetKnownFolderPath(FOLDERID_LocalAppData);
-		if (IsVpmConfigFilePresent(localAppDir))
-			return localAppDir;
+        // Search LocalAppData and User Profile path. Prefer LocalAppData as
+	// it is non-roaming.
+	char const* localAppDir = GetKnownFolderPath(FOLDERID_LocalAppData);
+	if (IsVpmConfigFilePresent(localAppDir))
+	    return localAppDir;
 
-		auto profileDir = GetKnownFolderPath(FOLDERID_Profile);
-		if (IsVpmConfigFilePresent(profileDir))
-			return profileDir;
+	char const* profileDir = GetKnownFolderPath(FOLDERID_Profile);
+	if (IsVpmConfigFilePresent(profileDir))
+	    return profileDir;
 
-		return !localAppDir.empty() ? localAppDir : "C:";
+	return !localAppDir.empty() ? localAppDir : "C:";
 #endif
     }
 }

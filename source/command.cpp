@@ -13,6 +13,15 @@ namespace
         static std::vector<ICommand const*> commands;
         return commands;
     }
+
+    struct IsCommandNameEqual
+    {
+        IsCommandNameEqual(std::string const& name) : name(name) {}
+
+        bool operator() (ICommand const* command) { return command->GetName() == name; }
+
+        std::string name;
+    };
 }
 
 void RegisterCommand(ICommand const& command)
@@ -27,8 +36,13 @@ std::vector<ICommand const*> const& GetCommands()
 
 ICommand const& GetCommand(std::string const& name)
 {
-    auto commands = GetCommands();
-    auto it = std::find_if(commands.begin(), commands.end(), [&] (ICommand const* command) { return command->GetName() == name; });
+    std::vector<ICommand const*> commands = GetCommands();
+
+    std::vector<ICommand const*>::iterator it = std::find_if(
+        commands.begin(),
+	commands.end(),
+	IsCommandNameEqual(name));
+
     if (it == commands.end())
         throw std::runtime_error("Invalid command: " + name);
 

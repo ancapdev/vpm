@@ -10,32 +10,37 @@
 namespace
 {
     AutoRegisterCommand<Help> autoRegistrator;
+
+    struct PrintOption
+    {
+        void operator() (OptionsDesc::Desc const& desc)
+        {
+	    int const padWidth = 30;
+	    if (desc.type == OptionsDesc::TYPE_FLAG)
+	        std::cout << "    -" << std::setw(padWidth) << std::left << desc.name << desc.description << std::endl;
+	    else
+	        std::cout << "    -" << std::setw(padWidth) << std::left << desc.name + "=<value>" << desc.description << std::endl;
+
+	    if (desc.type == OptionsDesc::TYPE_ENUM)
+	    {
+	        std::cout << "     " << std::setw(padWidth) << " " << "Valid values: ";
+		for (std::set<std::string>::iterator it = desc.values.begin(); it != desc.values.end(); ++it)
+		{
+		    if (it != desc.values.begin())
+		        std::cout << ", ";
+		    std::cout << *it;
+		}
+		std::cout << std::endl;
+	    }
+	    std::cout << std::endl;
+        }
+    };
 }
 
 void PrintOptions(OptionsDesc const& descriptor)
 {
     std::cout << "Options:" << std::endl;
-    descriptor.ForEach([] (OptionsDesc::Desc const& desc)
-    {
-        int const padWidth = 30;
-        if (desc.type == OptionsDesc::TYPE_FLAG)
-            std::cout << "    -" << std::setw(padWidth) << std::left << desc.name << desc.description << std::endl;
-        else
-            std::cout << "    -" << std::setw(padWidth) << std::left << desc.name + "=<value>" << desc.description << std::endl;
-
-        if (desc.type == OptionsDesc::TYPE_ENUM)
-        {
-            std::cout << "     " << std::setw(padWidth) << " " << "Valid values: ";
-            for (auto it = desc.values.begin(); it != desc.values.end(); ++it)
-            {
-                if (it != desc.values.begin())
-                    std::cout << ", ";
-                std::cout << *it;
-            }
-            std::cout << std::endl;
-        }
-        std::cout << std::endl;
-    });
+    descriptor.ForEach(PrintOption());
 }
 
 int Help::Run(const Configuration& configuration, int argc, char** argv) const
