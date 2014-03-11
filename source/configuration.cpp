@@ -34,16 +34,16 @@ namespace
         return "~";
 #else
         // Search LocalAppData and User Profile path. Prefer LocalAppData as
-	// it is non-roaming.
-	char const* localAppDir = GetKnownFolderPath(FOLDERID_LocalAppData);
-	if (IsVpmConfigFilePresent(localAppDir))
-	    return localAppDir;
+        // it is non-roaming.
+        std::string const localAppDir = GetKnownFolderPath(FOLDERID_LocalAppData);
+        if (IsVpmConfigFilePresent(localAppDir))
+            return localAppDir;
 
-	char const* profileDir = GetKnownFolderPath(FOLDERID_Profile);
-	if (IsVpmConfigFilePresent(profileDir))
-	    return profileDir;
+        std::string const profileDir = GetKnownFolderPath(FOLDERID_Profile);
+        if (IsVpmConfigFilePresent(profileDir))
+            return profileDir;
 
-	return !localAppDir.empty() ? localAppDir : "C:";
+        return !localAppDir.empty() ? localAppDir : "C:";
 #endif
     }
 }
