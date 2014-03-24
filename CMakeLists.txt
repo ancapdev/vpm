@@ -1,4 +1,4 @@
-# Copyright (c) 2011, Christian Rorvik
+# Copyright (c) 2011-2014, Christian Rorvik
 # Distributed under the Simplified BSD License (See accompanying file LICENSE.txt)
 
 # Variables used in the build
@@ -14,8 +14,9 @@
 #   default is CMAKE_CURRENT_LIST_DIR/../../
 #
 
-# Need 2.8.5 for string(FIND)
-cmake_minimum_required(VERSION 2.8.5)
+# Need 2.8.12 for target_link_libraries without build order dependencies
+cmake_minimum_required(VERSION 2.8.12)
+cmake_policy(VERSION 2.8.12)
 
 # If no user configure script and BUILD_PACKAGES not provided through command line,
 # build the vpm command line tool itself

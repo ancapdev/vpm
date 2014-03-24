@@ -48,7 +48,12 @@ macro(vpm_add_executable _name)
 endmacro()
 
 macro(vpm_add_link_dependencies _name)
-  target_link_libraries(${_name} ${ARGN})
+  get_target_property(_type ${_name} TYPE)
+  if (${_type} STREQUAL "STATIC_LIBRARY")
+    target_link_libraries(${_name} INTERFACE ${ARGN})
+  else()
+    target_link_libraries(${_name} PUBLIC ${ARGN})
+  endif()
 endmacro()
 
 macro(vpm_add_build_dependencies _name)
@@ -56,8 +61,7 @@ macro(vpm_add_build_dependencies _name)
 endmacro()
 
 macro(vpm_add_build_and_link_dependencies _name)
-  target_link_libraries(${_name} ${ARGN})
-  add_dependencies(${_name} ${ARGN})
+  target_link_libraries(${_name} PUBLIC ${ARGN})
 endmacro()
 
 macro(vpm_include_directories)
