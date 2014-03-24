@@ -52,10 +52,10 @@ def main(argv):
             print("Status for %s" % d)
             if len(output) > 0:
                 for l in output.splitlines():
-                    print(".. " + l)
+                    print(".. " + l.decode("utf-8"))
             if len(errors) > 0:
                 for l in errors.splitlines():
-                    print(".. " + l)
+                    print(".. " + l.decode("utf-8"))
 
     except (Exception) as error:
         print(str(error))
