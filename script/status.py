@@ -6,10 +6,10 @@ import subprocess
 import sys
 
 def usage():
-    print "Usage:"
-    print "\t", __file__, " <directory list or glob expression>"
-    print "Example:"
-    print "\t", __file__, " foo/trunk bar/*"
+    print("Usage:")
+    print("\t", __file__, " <directory list or glob expression>")
+    print("Example:")
+    print("\t", __file__, " foo/trunk bar/*")
 
 def main(argv):
     try:
@@ -49,16 +49,16 @@ def main(argv):
 
         for (d, p) in procs:
             (output, errors) = p.communicate()
-            print "Status for %s" % d
+            print("Status for %s" % d)
             if len(output) > 0:
                 for l in output.splitlines():
-                    print "..", l
+                    print(".. " + l)
             if len(errors) > 0:
                 for l in errors.splitlines():
-                    print "..", l
+                    print(".. " + l)
 
     except Exception, error:
-        print str(error)
+        print(str(error))
         sys.exit(1)
                 
 if __name__ == "__main__":

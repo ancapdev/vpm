@@ -6,10 +6,10 @@ import subprocess
 import sys
 
 def usage():
-    print "Usage:"
-    print "\t", __file__, " <directory list or glob expression>"
-    print "Example:"
-    print "\t", __file__, " foo/trunk bar/*"
+    print("Usage:")
+    print("\t", __file__, " <directory list or glob expression>")
+    print("Example:")
+    print("\t", __file__, " foo/trunk bar/*")
 
 def main(argv):
     try:
@@ -25,7 +25,7 @@ def main(argv):
 
                 # bzr repo handling
                 if os.path.isdir(d) and os.path.isdir(os.path.join(d, ".bzr")):
-                    print "Updating bzr repo", d
+                    print("Updating bzr repo", d)
                     procs.append(
                         (d, subprocess.Popen(
                                 ["bzr", "update", "--quiet", d],
@@ -37,7 +37,7 @@ def main(argv):
 
                 # git repo handling
                 elif os.path.isdir(d) and os.path.isdir(os.path.join(d, ".git")):
-                    print "Updating git repo", d
+                    print("Updating git repo", d)
                     procs.append(
                         (d, subprocess.Popen(
                                 ["git", "pull", "--ff-only", "--quiet"],
@@ -51,16 +51,16 @@ def main(argv):
 
         for (d, p) in procs:
             (output, errors) = p.communicate()
-            print "Updated", d
+            print("Updated", d)
             if len(output) > 0:
                 for l in output.splitlines():
-                    print "..", l
+                    print("..", l)
             if len(errors) > 0:
                 for l in errors.splitlines():
-                    print "..", l
+                    print("..", l)
 
     except Exception, error:
-        print str(error)
+        print(str(error))
         sys.exit(1)
                 
 if __name__ == "__main__":
