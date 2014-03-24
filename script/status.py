@@ -57,7 +57,7 @@ def main(argv):
                 for l in errors.splitlines():
                     print(".. " + l)
 
-    except Exception, error:
+    except (Exception) as error:
         print(str(error))
         sys.exit(1)
                 
