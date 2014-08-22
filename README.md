@@ -192,8 +192,8 @@ Aside from the files used by the framework, package layout is up to package auth
 | `vpm_get_version(<version_var> <package>)` | Get the configured version for a package. This does not mean that the package has been included |
 | `vpm_get_variant(<variant_var> <package>)` | Get the configured variant for a package. This does not mean that the package has been included |
 | `vpm_include_directories(<directory> ... <directory>)` | Equivalent of `CMake` `include_directories()` |
-| `vpm_minimum_version(<package> <version>)` | Specificy the minimum version of the `VPM` framework that must be used. Will fail the build if the framework version is lower than `<version>` |
-| `vpm_minimum_framework_version(<version>)` | Specificy the minimum version of a package that must be used. Will fail the build if the package version is lower than `<version>` |
+| `vpm_minimum_framework_version(<version>)` | Specificy the minimum version of the `VPM` framework that must be used. Will fail the build if the framework version is lower than `<version>` |
+| `vpm_minimum_version(<package> <version>)` | Specificy the minimum version of a package that must be used. Will fail the build if the package version is lower than `<version>` |
 | `vpm_add_library(<name> <file>..<file>)` | Equivalent of `CMake` `add_library()` |
 | `vpm_add_executable(<name> <file>..<file>)` | Equivalent of `CMake` `add_executable()` |
 | `vpm_add_link_dependencies(<target> <dependency>..<dependency>)` | Add libraries to link with `<target>`. Works transitively for library targets |
