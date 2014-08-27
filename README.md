@@ -148,8 +148,9 @@ This is the normal `CMakeLists.txt` as would be in a standard `CMake` build. Add
 vpm_depend_self()
 
 # Add dependency on boost.
-# Set default version in case no version has been configured globally.
+# Set default version and variant in case none has been configured globally.
 # Also check minimum version for the features we require.
+vpm_set_default_variant(boost proxy)
 vpm_set_default_version(boost 1.55.0)
 vpm_minimum_version(boost 1.53.0)
 vpm_depend(boost)
