@@ -32,6 +32,10 @@ namespace
                 return "Visual Studio 10" + vsArch;
             else if (*generator == "vs11")
                 return "Visual Studio 11" + vsArch;
+            else if (*generator == "vs12")
+                return "Visual Studio 12" + vsArch;
+            else if (*generator == "vs14")
+                return "Visual Studio 14" + vsArch;
             else if (*generator == "make")
                 return "Unix Makefiles";
             else if (*generator == "ninja")
@@ -92,6 +96,8 @@ Metabuild::Metabuild()
     generators.insert("vs9");
     generators.insert("vs10");
     generators.insert("vs11");
+    generators.insert("vs12");
+    generators.insert("vs14");
 #endif
 #if defined (__APPLE__)
     generators.insert("xcode");

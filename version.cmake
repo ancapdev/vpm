@@ -1,7 +1,7 @@
 # Copyright (c) 2011-2014, Christian Rorvik
 # Distributed under the Simplified BSD License (See accompanying file LICENSE.txt)
 
-set(VPM_FRAMEWORK_VERSION 1.07.00)
+set(VPM_FRAMEWORK_VERSION 1.08.00)
 
 macro(vpm_set_version _name _version)
   if(VPM_VERBOSE)
@@ -44,13 +44,17 @@ endmacro()
 
 
 macro(vpm_minimum_version _name _version)
-  vpm_get_version(_foundVersion ${_name})
-  if(${_foundVersion} MATCHES "^[0-9]+(\\.[0-9]+)*$")
-    if(${_foundVersion} VERSION_LESS ${_version})
-      message(FATAL_ERROR "Requires ${_name} version ${_version}. Found version ${_foundVersion}")
+  get_property(_hasChecked GLOBAL PROPERTY "${_name}-${_version}-checked" SET)
+  if(NOT ${_hasChecked})
+    set_property(GLOBAL PROPERTY "${_name}-${_version}-checked" TRUE)
+    vpm_get_version(_foundVersion ${_name})
+    if(${_foundVersion} MATCHES "^[0-9]+(\\.[0-9]+)*$")
+      if(${_foundVersion} VERSION_LESS ${_version})
+        message(FATAL_ERROR "Requires ${_name} version ${_version}. Found version ${_foundVersion}")
+      endif()
+    else()
+      message(WARNING "Ignoring ambiguous version check for ${_name}. Requires minimum version ${_version}. Found version ${_foundVersion}")
     endif()
-  else()
-    message("Ignoring ambiguous version check for ${_name}. Requires version ${_version}. Found version ${_foundVersion}")
   endif()
 endmacro()
 
